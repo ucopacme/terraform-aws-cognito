@@ -55,16 +55,13 @@ resource "aws_cognito_user" "this" {
   for_each          = var.enable_user_creation ? { for user in var.users : user.username => user } : {}
   user_pool_id      = aws_cognito_user_pool.this.id
   username          = each.key
-  temporary_password = random_password.temporary_password.result
+  temporary_password = random_password.temporary_password[each.key].result
 
   attributes = {
     email          = each.value.email
     email_verified = "true"
   }
 }
-
-
-
 
 
 
