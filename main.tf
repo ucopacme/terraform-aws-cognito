@@ -56,7 +56,16 @@ resource "aws_cognito_user" "this" {
     email          = var.users[count.index].email
     email_verified = "true" # Automatically mark the email as verified
   }
+
+  admin_create_user_config {
+    invite_message_template {
+      email_message = var.email_message_template
+      email_subject = var.email_subject_template
+      sms_message   = var.sms_message_template
+    }
+  }
 }
+
 
 
 
