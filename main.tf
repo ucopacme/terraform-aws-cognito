@@ -54,17 +54,10 @@ resource "aws_cognito_user" "this" {
 
   attributes = {
     email          = var.users[count.index].email
-    email_verified = "true" # Automatically mark the email as verified
-  }
-
-  admin_create_user_config {
-    invite_message_template {
-      email_message = var.email_message_template
-      email_subject = var.email_subject_template
-      sms_message   = var.sms_message_template
-    }
+    email_verified = "true"
   }
 }
+
 
 
 
@@ -72,4 +65,11 @@ resource "aws_cognito_user" "this" {
 resource "aws_cognito_user_pool_domain" "this" {
   domain       = var.user_pool_domain_name
   user_pool_id = aws_cognito_user_pool.this.id
+  admin_create_user_config {
+    invite_message_template {
+      email_message = var.email_message_template
+      email_subject = var.email_subject_template
+      sms_message   = var.sms_message_template
+    }
+  }
 }
