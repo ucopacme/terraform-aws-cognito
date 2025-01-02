@@ -131,3 +131,22 @@ variable "user_pool_domain_name" {
   type        = string
   default     = null
 }
+
+variable "email_message_template" {
+  description = "The template for the email message sent during user creation"
+  type        = string
+  default     = "Your username is {username} and temporary password is {####}"
+}
+
+variable "email_subject_template" {
+  description = "The subject of the email sent during user creation"
+  type        = string
+  default     = "Your temporary password"
+}
+
+variable "sms_message_template" {
+  description = "The template for the SMS message sent during user creation"
+  type        = string
+  default     = "Your username is {username} and temporary password is {####}"
+}
+
