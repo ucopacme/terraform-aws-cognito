@@ -42,25 +42,27 @@ resource "aws_cognito_user_pool_client" "this" {
 
 
 resource "random_password" "temporary_password" {
-  length           = 12  # Adjust length as per policy
-  special          = true
-  upper            = true
-  lower            = true
-  numeric           = true
-  
+  for_each = var.enable_user_creation ? { for user in var.users : user.username => user } : {}
+  length   = 12
+  special  = true
+  upper    = true
+  lower    = true
+  numeric  = true
 }
 
+
 resource "aws_cognito_user" "this" {
-  count              = var.enable_user_creation ? length(var.users) : 0
-  user_pool_id       = aws_cognito_user_pool.this.id
-  username           = var.users[count.index].username
+  for_each          = var.enable_user_creation ? { for user in var.users : user.username => user } : {}
+  user_pool_id      = aws_cognito_user_pool.this.id
+  username          = each.key
   temporary_password = random_password.temporary_password.result
 
   attributes = {
-    email          = var.users[count.index].email
+    email          = each.value.email
     email_verified = "true"
   }
 }
+
 
 
 
