@@ -16,6 +16,11 @@ resource "aws_cognito_user_pool" "this" {
 
   admin_create_user_config {
     allow_admin_create_user_only = true
+    invite_message_template {
+      email_message = var.email_message_template
+      email_subject = var.email_subject_template
+      sms_message   = var.sms_message_template
+    }
   }
 
   #tags = var.tags
@@ -32,14 +37,6 @@ resource "aws_cognito_user_pool_client" "this" {
   callback_urls               = var.callback_urls
   logout_urls                 = var.logout_urls
   supported_identity_providers = var.supported_identity_providers
-  admin_create_user_config {
-    invite_message_template {
-      email_message = var.email_message_template
-      email_subject = var.email_subject_template
-      sms_message   = var.sms_message_template
-    }
-  }
-
   explicit_auth_flows = var.explicit_auth_flows
 }
 
