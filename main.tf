@@ -32,6 +32,13 @@ resource "aws_cognito_user_pool_client" "this" {
   callback_urls               = var.callback_urls
   logout_urls                 = var.logout_urls
   supported_identity_providers = var.supported_identity_providers
+  admin_create_user_config {
+    invite_message_template {
+      email_message = var.email_message_template
+      email_subject = var.email_subject_template
+      sms_message   = var.sms_message_template
+    }
+  }
 
   explicit_auth_flows = var.explicit_auth_flows
 }
@@ -65,11 +72,5 @@ resource "aws_cognito_user" "this" {
 resource "aws_cognito_user_pool_domain" "this" {
   domain       = var.user_pool_domain_name
   user_pool_id = aws_cognito_user_pool.this.id
-  admin_create_user_config {
-    invite_message_template {
-      email_message = var.email_message_template
-      email_subject = var.email_subject_template
-      sms_message   = var.sms_message_template
-    }
-  }
+ 
 }
