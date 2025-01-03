@@ -45,7 +45,7 @@ variable "require_lowercase" {
 variable "require_numbers" {
   description = "Require numbers in the password"
   type        = bool
-  default     = true
+  default     = false
 }
 
 variable "require_symbols" {
