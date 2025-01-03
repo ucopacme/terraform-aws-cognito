@@ -47,7 +47,7 @@ resource "random_password" "temporary_password" {
   special  = true
   upper    = true
   lower    = true
-  number  = true
+  number  = false
 }
 
 
