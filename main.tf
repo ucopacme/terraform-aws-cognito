@@ -61,6 +61,7 @@ resource "aws_cognito_user" "this" {
     email          = each.value.email
     email_verified = "true"
   }
+  depends_on = [random_password.temporary_password]
 }
 
 
