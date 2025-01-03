@@ -47,11 +47,11 @@ resource "random_password" "temporary_password" {
   special  = true
   upper    = true
   lower    = true
-  number  = false
-  min_lower                        = 1
-  min_numeric                      = 1
-  min_upper                        = 1
-  min_special                      = 1
+  numeric  = true
+  min_lower = 1
+  min_numeric = 1
+  min_upper = 1
+  min_special = 1
 }
 
 
