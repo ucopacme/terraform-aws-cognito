@@ -150,3 +150,9 @@ variable "sms_message_template" {
   default     = "Your username is {username} and temporary password is {####}"
 }
 
+
+variable "post_authentication" {
+  description = "ARN of a Lambda function for post-authentication trigger"
+  type        = string
+  default     = null
+}

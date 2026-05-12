@@ -14,6 +14,13 @@ resource "aws_cognito_user_pool" "this" {
     temporary_password_validity_days = var.temporary_password_validity_days
   }
 
+  dynamic "lambda_config" {
+    for_each = var.post_authentication != null ? [1] : []
+    content {
+      post_authentication = var.post_authentication
+    }
+  }
+
   admin_create_user_config {
     allow_admin_create_user_only = true
     invite_message_template {
@@ -29,15 +36,26 @@ resource "aws_cognito_user_pool" "this" {
 
 
 resource "aws_cognito_user_pool_client" "this" {
-  user_pool_id                = aws_cognito_user_pool.this.id
-  name                        = var.user_pool_client_name
-  generate_secret             = var.generate_secret
-  allowed_oauth_flows         = var.allowed_oauth_flows
-  allowed_oauth_scopes        = var.allowed_oauth_scopes
-  callback_urls               = var.callback_urls
-  logout_urls                 = var.logout_urls
+  user_pool_id                 = aws_cognito_user_pool.this.id
+  name                         = var.user_pool_client_name
+  generate_secret              = var.generate_secret
+  allowed_oauth_flows          = var.allowed_oauth_flows
+  allowed_oauth_scopes         = var.allowed_oauth_scopes
+  callback_urls                = var.callback_urls
+  logout_urls                  = var.logout_urls
   supported_identity_providers = var.supported_identity_providers
-  explicit_auth_flows = var.explicit_auth_flows
+  explicit_auth_flows          = var.explicit_auth_flows
+
+  auth_session_validity  = 3
+  refresh_token_validity = 480
+  access_token_validity  = 480
+  id_token_validity      = 480
+
+  token_validity_units {
+    refresh_token = "minutes"
+    access_token  = "minutes"
+    id_token      = "minutes"
+  }
 }
 
 
