@@ -11,5 +11,5 @@ output "user_pool_domain_url" {
 }
 
 output "user_pool_arn" {
-    value = aws_cognito_user_pool.this.arn
-  }
+  value = aws_cognito_user_pool.this.arn
+}

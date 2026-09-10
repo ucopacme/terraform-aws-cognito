@@ -1,7 +1,7 @@
 resource "aws_cognito_user_pool" "this" {
-  name                      = var.user_pool_name
-  auto_verified_attributes  = var.auto_verified_attributes
-  mfa_configuration         = var.mfa_configuration
+  name                     = var.user_pool_name
+  auto_verified_attributes = var.auto_verified_attributes
+  mfa_configuration        = var.mfa_configuration
 
   alias_attributes = ["email", "preferred_username"]
 
@@ -15,9 +15,10 @@ resource "aws_cognito_user_pool" "this" {
   }
 
   dynamic "lambda_config" {
-    for_each = var.post_authentication != null ? [1] : []
+    for_each = (var.post_authentication != null || var.pre_token_generation != null) ? [1] : []
     content {
-      post_authentication = var.post_authentication
+      post_authentication  = var.post_authentication
+      pre_token_generation = var.pre_token_generation
     }
   }
 
@@ -60,23 +61,23 @@ resource "aws_cognito_user_pool_client" "this" {
 
 
 resource "random_password" "temporary_password" {
-  for_each = var.enable_user_creation ? { for user in var.users : user.username => user } : {}
-  length   = 12
-  special  = true
-  upper    = true
-  lower    = true
-  numeric  = true
-  min_lower = 1
+  for_each    = var.enable_user_creation ? { for user in var.users : user.username => user } : {}
+  length      = 12
+  special     = true
+  upper       = true
+  lower       = true
+  numeric     = true
+  min_lower   = 1
   min_numeric = 1
-  min_upper = 1
+  min_upper   = 1
   min_special = 1
 }
 
 
 resource "aws_cognito_user" "this" {
-  for_each          = var.enable_user_creation ? { for user in var.users : user.username => user } : {}
-  user_pool_id      = aws_cognito_user_pool.this.id
-  username          = each.key
+  for_each           = var.enable_user_creation ? { for user in var.users : user.username => user } : {}
+  user_pool_id       = aws_cognito_user_pool.this.id
+  username           = each.key
   temporary_password = random_password.temporary_password[each.key].result
 
   attributes = {
@@ -91,5 +92,5 @@ resource "aws_cognito_user" "this" {
 resource "aws_cognito_user_pool_domain" "this" {
   domain       = var.user_pool_domain_name
   user_pool_id = aws_cognito_user_pool.this.id
- 
+
 }

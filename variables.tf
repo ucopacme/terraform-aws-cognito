@@ -7,7 +7,7 @@ variable "enable_user_creation" {
 variable "aws_region" {
   description = "The AWS region where the Cognito User Pool is deployed"
   type        = string
-  default     = "us-west-2"  # You can set a default region if you want
+  default     = "us-west-2" # You can set a default region if you want
 }
 
 # Variable for user pool name
@@ -94,7 +94,7 @@ variable "allowed_oauth_flows" {
 variable "allowed_oauth_scopes" {
   description = "The allowed OAuth scopes"
   type        = list(string)
-  default     = ["openid", "profile","email"]
+  default     = ["openid", "profile", "email"]
 }
 
 variable "callback_urls" {
@@ -153,6 +153,12 @@ variable "sms_message_template" {
 
 variable "post_authentication" {
   description = "ARN of a Lambda function for post-authentication trigger"
+  type        = string
+  default     = null
+}
+
+variable "pre_token_generation" {
+  description = "ARN of a Lambda function for the pre-token-generation trigger. Used to inject the cognito:groups claim into tokens at issuance time (including first login)."
   type        = string
   default     = null
 }
